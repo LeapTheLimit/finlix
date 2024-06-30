@@ -127,9 +127,9 @@
         document.body.appendChild(widgetContainer);
     }
 
-    function loadScript(src, callback) {
+    function loadScript(url, callback) {
         const script = document.createElement('script');
-        script.src = src;
+        script.src = url;
         script.onload = callback;
         document.head.appendChild(script);
     }
@@ -301,11 +301,8 @@
                 float: right;
             }
 
-            .coming-soon {
-                color: #c3c3c3;
-                font-size: 24px;
-                text-align: center;
-                margin-top: 100px;
+            .history-entry {
+                margin-bottom: 10px;
             }
         `;
 
@@ -362,7 +359,7 @@
                 const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
                 const response = chatResponse.data.response;
-                rotateText(response);
+                displayRotatingText(response);
                 history.push({ bot: response });
 
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
@@ -376,19 +373,19 @@
             }
         }
 
-        function rotateText(text) {
-            const textChunks = text.match(/.{1,50}/g);
-            let chunkIndex = 0;
+        function displayRotatingText(text) {
+            const chunks = text.match(/.{1,50}/g); // Split text into chunks of 50 characters
+            let currentIndex = 0;
+            responseText.innerText = chunks[currentIndex];
 
-            function displayNextChunk() {
-                if (chunkIndex < textChunks.length) {
-                    responseText.innerText = textChunks[chunkIndex];
-                    chunkIndex++;
-                    setTimeout(displayNextChunk, 6000);
+            const intervalId = setInterval(() => {
+                currentIndex++;
+                if (currentIndex < chunks.length) {
+                    responseText.innerText = chunks[currentIndex];
+                } else {
+                    clearInterval(intervalId);
                 }
-            }
-
-            displayNextChunk();
+            }, 6000); // Display each chunk for 6 seconds
         }
 
         window.toggleHistory = function() {
@@ -412,8 +409,7 @@
         };
 
         window.homePage = function() {
-            const assistantWidget = document.getElementById('assistant-widget');
-            assistantWidget.innerHTML = '<div class="coming-soon">Coming Soon</div>';
+            location.href = 'home.html';
         };
 
         window.toggleWidget = function() {
@@ -451,7 +447,5 @@
         };
     }
 
-    window.initializeAssistantWidget = function() {
-        loadScript('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', initWidget);
-    };
+    loadScript('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', initWidget);
 })();
