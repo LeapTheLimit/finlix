@@ -317,7 +317,7 @@
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = 'ar-AR';
+            recognition.lang = ['ar-AR', 'en-US'];
 
             recognition.onstart = function() {
                 responseText.innerText = 'Listening...';
