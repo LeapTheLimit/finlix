@@ -127,13 +127,6 @@
         document.body.appendChild(widgetContainer);
     }
 
-    function loadScript(url, callback) {
-        const script = document.createElement('script');
-        script.src = url;
-        script.onload = callback;
-        document.head.appendChild(script);
-    }
-
     function initWidget() {
         loadStyles(widgetStyles);
         loadHTML(widgetHTML);
@@ -308,7 +301,7 @@
 
         loadStyles(cssStyles);
 
-        const serverUrl = 'https://my-flask-app-mz4r7ctc7q-zf.a.run.app';
+        const serverUrl = 'https://leapthelimit-mz4r7ctc7q-zf.a.run.app';
         const responseText = document.querySelector('.question-text');
         let recognition;
         let history = [];
@@ -359,8 +352,20 @@
                 const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
                 const response = chatResponse.data.response;
-                displayRotatingText(response);
                 history.push({ bot: response });
+
+                const chunks = response.match(/.{1,50}/g);
+                let currentIndex = 0;
+                responseText.innerText = chunks[currentIndex];
+
+                const intervalId = setInterval(() => {
+                    currentIndex++;
+                    if (currentIndex < chunks.length) {
+                        responseText.innerText = chunks[currentIndex];
+                    } else {
+                        clearInterval(intervalId);
+                    }
+                }, 6000); // Display each chunk for 6 seconds
 
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
 
@@ -373,35 +378,11 @@
             }
         }
 
-        function displayRotatingText(text) {
-            const chunks = text.match(/.{1,50}/g); // Split text into chunks of 50 characters
-            let currentIndex = 0;
-            responseText.innerText = chunks[currentIndex];
-
-            const intervalId = setInterval(() => {
-                currentIndex++;
-                if (currentIndex < chunks.length) {
-                    responseText.innerText = chunks[currentIndex];
-                } else {
-                    clearInterval(intervalId);
-                }
-            }, 6000); // Display each chunk for 6 seconds
-        }
-
         window.toggleHistory = function() {
             const historyBox = document.getElementById('historyBox');
-            const historyContent = document.getElementById('historyContent');
+            historyBox.innerHTML = "<div class='coming-soon'>Coming Soon</div>"; // Add this line
 
             if (historyBox.style.display === 'none' || historyBox.style.display === '') {
-                let historyHtml = history.map(entry => {
-                    if (entry.user) {
-                        return `<div class="history-entry">User: ${entry.user}</div>`;
-                    } else if (entry.bot) {
-                        return `<div class="history-entry">Bot: ${entry.bot}</div>`;
-                    }
-                }).join('');
-
-                historyContent.innerHTML = historyHtml;
                 historyBox.style.display = 'block';
             } else {
                 historyBox.style.display = 'none';
@@ -409,7 +390,7 @@
         };
 
         window.homePage = function() {
-            location.href = 'home.html';
+            alert("Coming Soon"); // Replace with appropriate behavior to show "Coming Soon"
         };
 
         window.toggleWidget = function() {
@@ -447,6 +428,6 @@
         };
     }
 
+    window.initializeAssistantWidget = initWidget;
     loadScript('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', initWidget);
 })();
-
