@@ -310,6 +310,8 @@
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
+            recognition.lang = ['ar-AR', 'en-US'];
+            
 
             recognition.onstart = function() {
                 responseText.innerText = 'Listening...';
@@ -342,19 +344,8 @@
         }
 
         window.startListening = function() {
-            const languages = ['ar-AR', 'en-US'];
-            const randomIndex = Math.floor(Math.random() * languages.length);
-            recognition.lang = languages[randomIndex];
             recognition.start();
         };
-
-        let currentResponseIndex = 0;
-        const responses = ["Your first response text...", "Your second response text...", "Your third response text..."];
-
-        function showNextResponse() {
-            currentResponseIndex = (currentResponseIndex + 1) % responses.length;
-            responseText.innerText = responses[currentResponseIndex];
-        }
 
         async function handleUserMessage(message) {
             try {
@@ -362,11 +353,10 @@
                 const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
                 const response = chatResponse.data.response;
-                responses.push(response);
-                showNextResponse();  // Show the response in rotating manner
+                responseText.innerText = response;
                 history.push({ bot: response });
 
-                const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: recognition.lang });
+                const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
 
                 const audioContent = ttsResponse.data.audioContent;
                 const audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
