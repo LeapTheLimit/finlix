@@ -91,7 +91,7 @@
                     <div class="shape"><div class="circle green-circle" aria-hidden="true"></div></div>
                     <div class="shape"><div class="circle gray-circle" aria-hidden="true"></div></div>
                 </div>
-                <h2 id="response-text" class="question-text">How can I help you?</h2>
+                <h2 class="question-text">How can I help you?</h2>
                 <div class="icon-container">
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b5c24373f8dd5ef5131c67177bccdbef574bf3f9ed5118f4e197ea82589a22df?apiKey=6ff838e322054338a5da6863c2494c61&" alt="History Icon" class="icon" onclick="toggleHistory()" />
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/95dad8e994e6b876df822e962cfc87ce2b5a9d7d32d644beda1bacf1554332cc?apiKey=6ff838e322054338a5da6863c2494c61&" alt="Microphone Icon" class="icon-large" onclick="startListening()" />
@@ -301,17 +301,16 @@
 
         loadStyles(cssStyles);
 
-        const serverUrl = 'https://leapthelimit-mz4r7ctc7q-zf.a.run.app';
-        const responseText = document.getElementById('response-text');
+        const serverUrl = 'https://my-flask-app-mz4r7ctc7q-zf.a.run.app';
+        const responseText = document.querySelector('.question-text');
         let recognition;
         let history = [];
-        let language = 'en-US';
 
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = language;
+            recognition.lang = 'ar-AR';
 
             recognition.onstart = function() {
                 responseText.innerText = 'Listening...';
@@ -344,7 +343,6 @@
         }
 
         window.startListening = function() {
-            recognition.lang = language;
             recognition.start();
         };
 
@@ -354,10 +352,10 @@
                 const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
                 const response = chatResponse.data.response;
+                displayRotatingText(response);
                 history.push({ bot: response });
-                displayText(response);
 
-                const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: language });
+                const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
 
                 const audioContent = ttsResponse.data.audioContent;
                 const audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
@@ -366,6 +364,21 @@
                 console.error('Error handling user message', error);
                 responseText.innerText = 'Error occurred while processing your message.';
             }
+        }
+
+        function displayRotatingText(text) {
+            const chunks = text.match(/.{1,50}/g);
+            let currentIndex = 0;
+
+            function showNextChunk() {
+                if (currentIndex < chunks.length) {
+                    responseText.innerText = chunks[currentIndex];
+                    currentIndex++;
+                    setTimeout(showNextChunk, 3000);
+                }
+            }
+
+            showNextChunk();
         }
 
         window.toggleHistory = function() {
@@ -425,21 +438,6 @@
                 `;
             }
         };
-
-        function displayText(text) {
-            const maxLength = 50;
-            let index = 0;
-
-            function showNextPart() {
-                if (index < text.length) {
-                    responseText.innerText = text.substring(index, index + maxLength);
-                    index += maxLength;
-                    setTimeout(showNextPart, 6000); // Show next part after 6 seconds
-                }
-            }
-
-            showNextPart();
-        }
     }
 
     window.initializeAssistantWidget = initWidget;
