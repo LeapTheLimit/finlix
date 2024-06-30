@@ -127,36 +127,6 @@
         document.body.appendChild(widgetContainer);
     }
 
-    function splitTextIntoChunks(text, chunkSize = 100) {
-        const words = text.split(' ');
-        const chunks = [];
-        let currentChunk = [];
-
-        for (const word of words) {
-            if (currentChunk.join(' ').length + word.length + 1 > chunkSize) {
-                chunks.push(currentChunk.join(' '));
-                currentChunk = [word];
-            } else {
-                currentChunk.push(word);
-            }
-        }
-
-        if (currentChunk.length > 0) {
-            chunks.push(currentChunk.join(' '));
-        }
-
-        return chunks;
-    }
-
-    function rotateText(element, chunks, interval = 3000) {
-        let currentIndex = 0;
-
-        setInterval(() => {
-            element.innerText = chunks[currentIndex];
-            currentIndex = (currentIndex + 1) % chunks.length;
-        }, interval);
-    }
-
     function initWidget() {
         loadStyles(widgetStyles);
         loadHTML(widgetHTML);
@@ -331,16 +301,30 @@
 
         loadStyles(cssStyles);
 
-        const serverUrl = 'https://my-flask-app-mz4r7ctc7q-zf.a.run.app';
-        const responseText = document.querySelector('.question-text');
+        const serverUrl = 'https://leapthelimit-mz4r7ctc7q-zf.a.run.app';
         let recognition;
         let history = [];
+        let responseText = document.querySelector('.question-text');
+
+        function displayTextWithRotation(text) {
+            const maxLength = 50;
+            let index = 0;
+
+            function updateText() {
+                const nextIndex = Math.min(index + maxLength, text.length);
+                responseText.innerText = text.substring(index, nextIndex);
+                index = nextIndex === text.length ? 0 : nextIndex;
+            }
+
+            updateText();
+            setInterval(updateText, 6000);
+        }
 
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = 'ar-AR';
+            recognition.lang = 'en-US';
 
             recognition.onstart = function() {
                 responseText.innerText = 'Listening...';
@@ -373,6 +357,9 @@
         }
 
         window.startListening = function() {
+            const languages = ['ar-AR', 'en-US'];
+            const randomIndex = Math.floor(Math.random() * languages.length);
+            recognition.lang = languages[randomIndex];
             recognition.start();
         };
 
@@ -382,12 +369,10 @@
                 const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
                 const response = chatResponse.data.response;
-                const chunks = splitTextIntoChunks(response, 100);
-                rotateText(responseText, chunks);
-
+                displayTextWithRotation(response);
                 history.push({ bot: response });
 
-                const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
+                const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: recognition.lang });
 
                 const audioContent = ttsResponse.data.audioContent;
                 const audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
