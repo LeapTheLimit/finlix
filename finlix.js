@@ -408,8 +408,8 @@
             }
         };
 
-        window.homePage = function() {
-            location.href = 'home.html';
+       window.homePage = function() {
+            alert("Coming Soon"); // Replace with appropriate behavior to show "Coming Soon"
         };
 
         window.toggleWidget = function() {
