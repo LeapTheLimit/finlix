@@ -428,6 +428,5 @@
         };
     }
 
-    window.initializeAssistantWidget = initWidget;
     loadScript('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', initWidget);
 })();
