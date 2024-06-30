@@ -91,7 +91,7 @@
                     <div class="shape"><div class="circle green-circle" aria-hidden="true"></div></div>
                     <div class="shape"><div class="circle gray-circle" aria-hidden="true"></div></div>
                 </div>
-                <h2 class="question-text" id="response-text">How can I help you?</h2>
+                <h2 id="response-text" class="question-text">How can I help you?</h2>
                 <div class="icon-container">
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b5c24373f8dd5ef5131c67177bccdbef574bf3f9ed5118f4e197ea82589a22df?apiKey=6ff838e322054338a5da6863c2494c61&" alt="History Icon" class="icon" onclick="toggleHistory()" />
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/95dad8e994e6b876df822e962cfc87ce2b5a9d7d32d644beda1bacf1554332cc?apiKey=6ff838e322054338a5da6863c2494c61&" alt="Microphone Icon" class="icon-large" onclick="startListening()" />
@@ -301,7 +301,7 @@
 
         loadStyles(cssStyles);
 
-        const serverUrl = 'https://my-flask-app-mz4r7ctc7q-zf.a.run.app';
+        const serverUrl = 'https://leapthelimit-mz4r7ctc7q-zf.a.run.app';
         const responseText = document.getElementById('response-text');
         let recognition;
         let history = [];
@@ -311,6 +311,7 @@
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
+            recognition.lang = language;
 
             recognition.onstart = function() {
                 responseText.innerText = 'Listening...';
@@ -353,8 +354,8 @@
                 const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
                 const response = chatResponse.data.response;
-                displayText(response);
                 history.push({ bot: response });
+                displayText(response);
 
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: language });
 
@@ -425,20 +426,15 @@
             }
         };
 
-        window.setLanguage = function(lang) {
-            language = lang;
-            responseText.innerText = `Language set to ${lang === 'en-US' ? 'English' : 'Arabic'}`;
-        };
-
         function displayText(text) {
             const maxLength = 50;
-            let currentIndex = 0;
+            let index = 0;
 
             function showNextPart() {
-                if (currentIndex < text.length) {
-                    responseText.innerText = text.slice(currentIndex, currentIndex + maxLength);
-                    currentIndex += maxLength;
-                    setTimeout(showNextPart, 6000);
+                if (index < text.length) {
+                    responseText.innerText = text.substring(index, index + maxLength);
+                    index += maxLength;
+                    setTimeout(showNextPart, 6000); // Show next part after 6 seconds
                 }
             }
 
