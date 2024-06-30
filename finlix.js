@@ -127,6 +127,13 @@
         document.body.appendChild(widgetContainer);
     }
 
+    function loadScript(url, callback) {
+        const script = document.createElement('script');
+        script.src = url;
+        script.onload = callback;
+        document.head.appendChild(script);
+    }
+
     function initWidget() {
         loadStyles(widgetStyles);
         loadHTML(widgetHTML);
@@ -374,7 +381,7 @@
                 if (currentIndex < chunks.length) {
                     responseText.innerText = chunks[currentIndex];
                     currentIndex++;
-                    setTimeout(showNextChunk, 3000);
+                    setTimeout(showNextChunk, 6000);
                 }
             }
 
@@ -439,6 +446,8 @@
             }
         };
     }
+
+    loadScript("https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js", initWidget);
 
     window.initializeAssistantWidget = initWidget;
 })();
