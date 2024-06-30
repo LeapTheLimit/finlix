@@ -40,6 +40,7 @@
             position: fixed;
             bottom: 120px;
             right: 20px;
+            display: none;
             z-index: 9999;
         }
         #widget-icon {
