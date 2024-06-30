@@ -1,26 +1,24 @@
 (function() {
     const widgetHTML = `
-        <div id="assistant-widget" style="display: none;">
-            <section class="finlix-container">
-                <h1 class="brand-name">Finlix</h1>
-                <p class="powered-by">Powered by LeapTheLimit</p>
-                <div class="shape-container">
-                    <div class="shape"><div class="circle purple-circle" aria-hidden="true"></div></div>
-                    <div class="shape"><div class="circle blue-circle" aria-hidden="true"></div></div>
-                    <div class="shape"><div class="circle green-circle" aria-hidden="true"></div></div>
-                    <div class="shape"><div class="circle gray-circle" aria-hidden="true"></div></div>
-                </div>
-                <h2 class="question-text">What do you know about <span style="color: rgba(195, 195, 195, 1)">Finance?</span></h2>
-                <div class="icon-container">
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b5c24373f8dd5ef5131c67177bccdbef574bf3f9ed5118f4e197ea82589a22df?apiKey=6ff838e322054338a5da6863c2494c61&" alt="History Icon" class="icon" onclick="toggleHistory()" />
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/95dad8e994e6b876df822e962cfc87ce2b5a9d7d32d644beda1bacf1554332cc?apiKey=6ff838e322054338a5da6863c2494c61&" alt="Microphone Icon" class="icon-large" onclick="startListening()" />
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/ec3ad13fd252c5c0acb23d9fb00ecd75dab04844fe615a32906bc0f2ee5f0f79?apiKey=6ff838e322054338a5da6863c2494c61&" alt="Home Icon" class="icon-bordered" onclick="homePage()" />
-                </div>
-            </section>
-            <div class="history-box" id="historyBox">
-                <button class="close-button" onclick="toggleHistory()">Close</button>
-                <div id="historyContent"></div>
+        <section class="finlix-container">
+            <h1 class="brand-name">Finlix</h1>
+            <p class="powered-by">Powered by LeapTheLimit</p>
+            <div class="shape-container">
+                <div class="shape"><div class="circle purple-circle" aria-hidden="true"></div></div>
+                <div class="shape"><div class="circle blue-circle" aria-hidden="true"></div></div>
+                <div class="shape"><div class="circle green-circle" aria-hidden="true"></div></div>
+                <div class="shape"><div class="circle gray-circle" aria-hidden="true"></div></div>
             </div>
+            <h2 class="question-text">What do you know about <span style="color: rgba(195, 195, 195, 1)">Finance?</span></h2>
+            <div class="icon-container">
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b5c24373f8dd5ef5131c67177bccdbef574bf3f9ed5118f4e197ea82589a22df?apiKey=6ff838e322054338a5da6863c2494c61&" alt="History Icon" class="icon" onclick="toggleHistory()" />
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/95dad8e994e6b876df822e962cfc87ce2b5a9d7d32d644beda1bacf1554332cc?apiKey=6ff838e322054338a5da6863c2494c61&" alt="Microphone Icon" class="icon-large" onclick="startListening()" />
+                <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/ec3ad13fd252c5c0acb23d9fb00ecd75dab04844fe615a32906bc0f2ee5f0f79?apiKey=6ff838e322054338a5da6863c2494c61&" alt="Home Icon" class="icon-bordered" onclick="homePage()" />
+            </div>
+        </section>
+        <div class="history-box" id="historyBox">
+            <button class="close-button" onclick="toggleHistory()">Close</button>
+            <div id="historyContent"></div>
         </div>
     `;
 
