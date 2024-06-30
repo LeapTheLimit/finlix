@@ -127,6 +127,13 @@
         document.body.appendChild(widgetContainer);
     }
 
+    function loadScript(src, callback) {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = callback;
+        document.head.appendChild(script);
+    }
+
     function initWidget() {
         loadStyles(widgetStyles);
         loadHTML(widgetHTML);
@@ -294,19 +301,22 @@
                 float: right;
             }
 
-            .history-entry {
-                margin-bottom: 10px;
+            .coming-soon {
+                color: #c3c3c3;
+                font-size: 24px;
+                text-align: center;
+                margin-top: 100px;
             }
         `;
 
         loadStyles(cssStyles);
 
-        const serverUrl = 'https://leapthelimit-mz4r7ctc7q-zf.a.run.app';
+        const serverUrl = 'https://my-flask-app-mz4r7ctc7q-zf.a.run.app';
         const responseText = document.querySelector('.question-text');
         let recognition;
         let history = [];
 
-        if ('webkitSpeechRecognition' in window) {
+      if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
@@ -352,20 +362,8 @@
                 const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
                 const response = chatResponse.data.response;
+                rotateText(response);
                 history.push({ bot: response });
-
-                const chunks = response.match(/.{1,50}/g);
-                let currentIndex = 0;
-                responseText.innerText = chunks[currentIndex];
-
-                const intervalId = setInterval(() => {
-                    currentIndex++;
-                    if (currentIndex < chunks.length) {
-                        responseText.innerText = chunks[currentIndex];
-                    } else {
-                        clearInterval(intervalId);
-                    }
-                }, 6000); // Display each chunk for 6 seconds
 
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
 
@@ -378,11 +376,35 @@
             }
         }
 
+        function rotateText(text) {
+            const textChunks = text.match(/.{1,50}/g);
+            let chunkIndex = 0;
+
+            function displayNextChunk() {
+                if (chunkIndex < textChunks.length) {
+                    responseText.innerText = textChunks[chunkIndex];
+                    chunkIndex++;
+                    setTimeout(displayNextChunk, 6000);
+                }
+            }
+
+            displayNextChunk();
+        }
+
         window.toggleHistory = function() {
             const historyBox = document.getElementById('historyBox');
-            historyBox.innerHTML = "<div class='coming-soon'>Coming Soon</div>"; // Add this line
+            const historyContent = document.getElementById('historyContent');
 
             if (historyBox.style.display === 'none' || historyBox.style.display === '') {
+                let historyHtml = history.map(entry => {
+                    if (entry.user) {
+                        return `<div class="history-entry">User: ${entry.user}</div>`;
+                    } else if (entry.bot) {
+                        return `<div class="history-entry">Bot: ${entry.bot}</div>`;
+                    }
+                }).join('');
+
+                historyContent.innerHTML = historyHtml;
                 historyBox.style.display = 'block';
             } else {
                 historyBox.style.display = 'none';
@@ -390,7 +412,8 @@
         };
 
         window.homePage = function() {
-            alert("Coming Soon"); // Replace with appropriate behavior to show "Coming Soon"
+            const assistantWidget = document.getElementById('assistant-widget');
+            assistantWidget.innerHTML = '<div class="coming-soon">Coming Soon</div>';
         };
 
         window.toggleWidget = function() {
@@ -428,6 +451,7 @@
         };
     }
 
-    loadScript('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', initWidget);
-     window.initializeAssistantWidget = initWidget;
+    window.initializeAssistantWidget = function() {
+        loadScript('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', initWidget);
+    };
 })();
