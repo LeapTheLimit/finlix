@@ -127,6 +127,36 @@
         document.body.appendChild(widgetContainer);
     }
 
+    function splitTextIntoChunks(text, chunkSize = 100) {
+        const words = text.split(' ');
+        const chunks = [];
+        let currentChunk = [];
+
+        for (const word of words) {
+            if (currentChunk.join(' ').length + word.length + 1 > chunkSize) {
+                chunks.push(currentChunk.join(' '));
+                currentChunk = [word];
+            } else {
+                currentChunk.push(word);
+            }
+        }
+
+        if (currentChunk.length > 0) {
+            chunks.push(currentChunk.join(' '));
+        }
+
+        return chunks;
+    }
+
+    function rotateText(element, chunks, interval = 3000) {
+        let currentIndex = 0;
+
+        setInterval(() => {
+            element.innerText = chunks[currentIndex];
+            currentIndex = (currentIndex + 1) % chunks.length;
+        }, interval);
+    }
+
     function initWidget() {
         loadStyles(widgetStyles);
         loadHTML(widgetHTML);
@@ -310,8 +340,7 @@
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = ['ar-AR', 'en-US'];
-            
+            recognition.lang = 'ar-AR';
 
             recognition.onstart = function() {
                 responseText.innerText = 'Listening...';
@@ -353,7 +382,9 @@
                 const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
                 const response = chatResponse.data.response;
-                responseText.innerText = response;
+                const chunks = splitTextIntoChunks(response, 100);
+                rotateText(responseText, chunks);
+
                 history.push({ bot: response });
 
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
