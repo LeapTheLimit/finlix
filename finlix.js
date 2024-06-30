@@ -18,7 +18,6 @@
             bottom: 120px;
             right: 20px;
             display: none; /* Start hidden */
-            z-index: 9999;
         }
         #widget-icon {
             position: fixed;
@@ -27,7 +26,6 @@
             width: 86px;
             height: 88px;
             cursor: pointer;
-            z-index: 9999;
         }
 
         .breathing {
