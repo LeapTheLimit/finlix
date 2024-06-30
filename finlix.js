@@ -359,7 +359,7 @@
                 const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
                 const response = chatResponse.data.response;
-                displayRotatingText(response);
+                showRotatingText(response);
                 history.push({ bot: response });
 
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
@@ -373,7 +373,8 @@
             }
         }
 
-        function displayRotatingText(text) {
+        function showRotatingText(text) {
+            const responseText = document.querySelector('.question-text');
             const chunks = text.match(/.{1,50}/g);
             let currentIndex = 0;
 
@@ -445,9 +446,13 @@
                 `;
             }
         };
-    }
 
-    loadScript("https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js", initWidget);
+        if (typeof axios === 'undefined') {
+            loadScript('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', () => {
+                console.log('Axios loaded');
+            });
+        }
+    }
 
     window.initializeAssistantWidget = initWidget;
 })();
