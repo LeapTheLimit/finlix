@@ -359,7 +359,7 @@
                 const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
                 const response = chatResponse.data.response;
-                showRotatingText(response);
+                displayRotatingText(response);
                 history.push({ bot: response });
 
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
@@ -373,20 +373,19 @@
             }
         }
 
-        function showRotatingText(text) {
-            const responseText = document.querySelector('.question-text');
-            const chunks = text.match(/.{1,50}/g);
+        function displayRotatingText(text) {
+            const chunks = text.match(/.{1,50}/g); // Split text into chunks of 50 characters
             let currentIndex = 0;
+            responseText.innerText = chunks[currentIndex];
 
-            function showNextChunk() {
+            const intervalId = setInterval(() => {
+                currentIndex++;
                 if (currentIndex < chunks.length) {
                     responseText.innerText = chunks[currentIndex];
-                    currentIndex++;
-                    setTimeout(showNextChunk, 6000);
+                } else {
+                    clearInterval(intervalId);
                 }
-            }
-
-            showNextChunk();
+            }, 6000); // Display each chunk for 6 seconds
         }
 
         window.toggleHistory = function() {
@@ -446,13 +445,8 @@
                 `;
             }
         };
-
-        if (typeof axios === 'undefined') {
-            loadScript('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', () => {
-                console.log('Axios loaded');
-            });
-        }
     }
 
-    window.initializeAssistantWidget = initWidget;
+    loadScript('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', initWidget);
 })();
+
