@@ -313,7 +313,7 @@
         let recognition;
         let history = [];
 
-        if ('webkitSpeechRecognition' in window) {
+      if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
@@ -367,10 +367,6 @@
                 const audioContent = ttsResponse.data.audioContent;
                 const audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
                 audio.play();
-
-                // Save chat message
-                await axios.post(`${serverUrl}/save-chat-message`, { message: response, category: 'chat' });
-
             } catch (error) {
                 console.error('Error handling user message', error);
                 responseText.innerText = 'Error occurred while processing your message.';
@@ -392,7 +388,7 @@
             }, 6000); // Display each chunk for 6 seconds
         }
 
-        window.toggleHistory = async function() {
+        window.toggleHistory = function() {
             const historyBox = document.getElementById('historyBox');
             const historyContent = document.getElementById('historyContent');
 
@@ -406,23 +402,13 @@
                 }).join('');
 
                 historyContent.innerHTML = historyHtml;
-
-                // Fetch chat history from server
-                const response = await axios.get(`${serverUrl}/chat-history`);
-                const chatHistory = response.data;
-
-                historyHtml = chatHistory.map(entry => {
-                    return `<div class="history-entry">${entry.timestamp}: ${entry.message} (${entry.category})</div>`;
-                }).join('');
-                historyContent.innerHTML = historyHtml;
-
                 historyBox.style.display = 'block';
             } else {
                 historyBox.style.display = 'none';
             }
         };
 
-        window.homePage = function() {
+       window.homePage = function() {
             alert("Coming Soon"); // Replace with appropriate behavior to show "Coming Soon"
         };
 
