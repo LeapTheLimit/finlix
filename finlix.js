@@ -392,7 +392,7 @@
             try {
                 const scrapeResponse = await axios.post(`${serverUrl}/scrape`, { url: url });
                 const explanation = scrapeResponse.data.explanation;
-                alert(explanation);
+                handleUserMessage(`The page says: ${explanation}`);
             } catch (error) {
                 console.error('Error scraping website', error);
                 alert('Failed to scrape the website.');
@@ -434,7 +434,7 @@
             }
         };
 
-       window.homePage = function() {
+        window.homePage = function() {
             alert("Coming Soon"); // Replace with appropriate behavior to show "Coming Soon"
         };
 
