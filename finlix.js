@@ -314,11 +314,10 @@
         let history = [];
 
         if ('webkitSpeechRecognition' in window) {
-    recognition = new webkitSpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = ['ar-AR', 'en-US', 'he-IL'];
-}
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = ['ar-AR', 'en-US', 'he-IL'];) 
 
 
             recognition.onstart = function() {
