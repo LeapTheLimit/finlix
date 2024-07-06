@@ -317,7 +317,7 @@
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = 'en-US'; // Set initial language to English
+            recognition.lang = ['ar-AR', 'en-US', 'he-IL'];
 
             recognition.onstart = function() {
                 responseText.innerText = 'Listening...';
@@ -434,7 +434,7 @@
             }
         };
 
-       window.homePage = function() {
+        window.homePage = function() {
             alert("Coming Soon"); // Replace with appropriate behavior to show "Coming Soon"
         };
 
