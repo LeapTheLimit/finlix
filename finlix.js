@@ -1,10 +1,8 @@
 (function() {
     const widgetStyles = `
         #assistant-widget {
-            width: 350px;
-            max-width: 90%;
-            height: 600px;
-            max-height: 80vh;
+            width: 400px;
+            height: 704px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -17,7 +15,7 @@
             border-radius: 10px;
             overflow: hidden;
             position: fixed;
-            bottom: 20px;
+            bottom: 120px;
             right: 20px;
             display: none; /* Start hidden */
         }
@@ -25,8 +23,8 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 60px;
-            height: 60px;
+            width: 86px;
+            height: 88px;
             cursor: pointer;
         }
 
@@ -65,21 +63,6 @@
             }
             100% {
                 transform: scale(1);
-            }
-        }
-
-        @media only screen and (max-width: 600px) {
-            #assistant-widget {
-                width: 90%;
-                height: 60vh;
-                bottom: 20px;
-                right: 5%;
-            }
-            #widget-icon {
-                width: 50px;
-                height: 50px;
-                bottom: 20px;
-                right: 5%;
             }
         }
     `;
@@ -121,7 +104,7 @@
             </div>
         </div>
         <div id="widget-icon" onclick="toggleWidget()">
-            <svg width="60" height="60" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="86" height="88" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="43" cy="44" rx="43" ry="44" fill="black"/>
                 <circle cx="32" cy="35" r="12" fill="#C736D9"/>
                 <circle cx="56" cy="55" r="9" fill="#9AED66"/>
@@ -321,44 +304,6 @@
             .history-entry {
                 margin-bottom: 10px;
             }
-
-            @media only screen and (max-width: 600px) {
-                #assistant-widget {
-                    width: 90%;
-                    height: 60vh;
-                    bottom: 20px;
-                    right: 5%;
-                }
-                #widget-icon {
-                    width: 50px;
-                    height: 50px;
-                    bottom: 20px;
-                    right: 5%;
-                }
-                .shape-container {
-                    height: 200px;
-                }
-                .question-text {
-                    font-size: 18px;
-                    margin-top: 10px;
-                }
-                .icon-container {
-                    gap: 20px;
-                }
-                .icon {
-                    width: 30px;
-                }
-                .icon-large {
-                    width: 50px;
-                }
-                .icon-bordered {
-                    width: 30px;
-                }
-                .history-box {
-                    width: 90%;
-                    height: 60%;
-                }
-            }
         `;
 
         loadStyles(cssStyles);
@@ -489,7 +434,7 @@
             }
         };
 
-        window.homePage = function() {
+       window.homePage = function() {
             alert("Coming Soon"); // Replace with appropriate behavior to show "Coming Soon"
         };
 
@@ -500,7 +445,7 @@
             if (widget.style.display === 'none' || widget.style.display === '') {
                 widget.style.display = 'flex';
                 widgetIcon.innerHTML = `
-                    <svg width="60" height="60" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="86" height="88" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <ellipse cx="43" cy="44" rx="43" ry="44" fill="black"/>
                         <path d="M43.5 50.5817L28.9465 34.3393C28.5411 33.8869 27.8838 33.8869 27.4785 34.3393L26.304 35.65C25.8987 36.1024 25.8987 36.836 26.304 37.2884L42.766 55.6607C43.1714 56.1131 43.8286 56.1131 44.234 55.6607L60.696 37.2884C61.1013 36.836 61.1013 36.1024 60.696 35.65L59.5215 34.3393C59.1162 33.8869 58.4589 33.8869 58.0535 34.3393L43.5 50.5817Z" fill="url(#paint0_linear_5_74)"/>
                         <defs>
@@ -516,7 +461,7 @@
             } else {
                 widget.style.display = 'none';
                 widgetIcon.innerHTML = `
-                    <svg width="60" height="60" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="86" height="88" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <ellipse cx="43" cy="44" rx="43" ry="44" fill="black"/>
                         <circle cx="32" cy="35" r="12" fill="#C736D9"/>
                         <circle cx="56" cy="55" r="9" fill="#9AED66"/>
