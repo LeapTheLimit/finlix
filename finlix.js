@@ -313,11 +313,11 @@
         let recognition;
         let history = [];
 
-        if ('webkitSpeechRecognition' in window) {
+      if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = ['ar-AR', 'en-US', 'he-IL'];
+            recognition.lang = ['ar-AR', 'en-US'];
 
             recognition.onstart = function() {
                 responseText.innerText = 'Listening...';
@@ -367,35 +367,9 @@
                 const audioContent = ttsResponse.data.audioContent;
                 const audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
                 audio.play();
-
-                // Save chat message
-                await saveChatMessage(message, "general");
-
             } catch (error) {
                 console.error('Error handling user message', error);
                 responseText.innerText = 'Error occurred while processing your message.';
-            }
-        }
-
-        async function saveChatMessage(message, category) {
-            try {
-                await axios.post(`${serverUrl}/save-chat-message`, {
-                    message: message,
-                    category: category
-                });
-            } catch (error) {
-                console.error('Error saving chat message', error);
-            }
-        }
-
-        async function scrapeWebsite(url) {
-            try {
-                const scrapeResponse = await axios.post(`${serverUrl}/scrape`, { url: url });
-                const explanation = scrapeResponse.data.explanation;
-                handleUserMessage(`The page says: ${explanation}`);
-            } catch (error) {
-                console.error('Error scraping website', error);
-                alert('Failed to scrape the website.');
             }
         }
 
@@ -434,7 +408,7 @@
             }
         };
 
-        window.homePage = function() {
+       window.homePage = function() {
             alert("Coming Soon"); // Replace with appropriate behavior to show "Coming Soon"
         };
 
