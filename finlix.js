@@ -1,10 +1,8 @@
 (function() {
     const widgetStyles = `
         #assistant-widget {
-            width: 90%;
-            max-width: 400px;
-            height: 70vh;
-            max-height: 704px;
+            width: 400px;
+            height: 704px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -18,15 +16,15 @@
             overflow: hidden;
             position: fixed;
             bottom: 120px;
-            right: 5%;
+            right: 20px;
             display: none; /* Start hidden */
         }
         #widget-icon {
             position: fixed;
             bottom: 20px;
-            right: 5%;
-            width: 60px;
-            height: 60px;
+            right: 20px;
+            width: 86px;
+            height: 88px;
             cursor: pointer;
         }
 
@@ -65,6 +63,21 @@
             }
             100% {
                 transform: scale(1);
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+            #assistant-widget {
+                width: 90%;
+                height: 80vh;
+                bottom: 20px;
+                right: 5%;
+            }
+            #widget-icon {
+                width: 60px;
+                height: 60px;
+                bottom: 20px;
+                right: 5%;
             }
         }
     `;
@@ -106,7 +119,7 @@
             </div>
         </div>
         <div id="widget-icon" onclick="toggleWidget()">
-            <svg width="60" height="60" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="86" height="88" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="43" cy="44" rx="43" ry="44" fill="black"/>
                 <circle cx="32" cy="35" r="12" fill="#C736D9"/>
                 <circle cx="56" cy="55" r="9" fill="#9AED66"/>
@@ -194,7 +207,7 @@
                 margin-top: 20px;
                 position: relative;
                 width: 100%;
-                height: 200px; /* Adjust as needed */
+                height: 300px; /* Adjust as needed */
             }
 
             .shape {
@@ -213,40 +226,40 @@
 
             .purple-circle {
                 background-color: #c736d9;
-                width: 100px;
-                height: 100px;
-                left: calc(50% - 50px); /* Adjusted to be centered and not overlapping */
-                top: calc(50% - 50px); /* Adjusted to be centered and not overlapping */
+                width: 129px;
+                height: 134px;
+                left: calc(50% - 105px); /* Adjusted to be centered and not overlapping */
+                top: calc(50% - 100px); /* Adjusted to be centered and not overlapping */
             }
 
             .blue-circle {
                 background-color: #bcd8fa;
-                width: 50px;
-                height: 50px;
-                left: calc(50% + 20px); /* Adjusted to be centered and not overlapping */
-                top: calc(50% - 40px); /* Adjusted to be centered and not overlapping */
+                width: 68px;
+                height: 68px;
+                left: calc(50% + 40px); /* Adjusted to be centered and not overlapping */
+                top: calc(50% - 80px); /* Adjusted to be centered and not overlapping */
             }
 
             .green-circle {
                 background-color: #9aed66;
-                width: 60px;
-                height: 60px;
-                left: calc(50% + 10px); /* Adjusted to be centered and not overlapping */
+                width: 90px;
+                height: 86px;
+                left: calc(50% + 20px); /* Adjusted to be centered and not overlapping */
                 top: calc(50% + 10px); /* Adjusted to be centered and not overlapping */
             }
 
             .gray-circle {
                 background-color: #d9d9d9;
-                width: 45px;
-                height: 45px;
+                width: 61px;
+                height: 58px;
                 left: calc(50% - 60px); /* Adjusted to be centered and not overlapping */
-                top: calc(80% + 40px); /* Adjusted to be centered and not overlapping */
+                top: calc(80% + 50px); /* Adjusted to be centered and not overlapping */
             }
 
             .question-text {
                 color: #c3c3c3;
                 margin-top: 20px;
-                font: 400 20px/28px Inter, sans-serif;
+                font: 400 28px/36px Inter, sans-serif;
                 text-align: center;
             }
 
@@ -254,7 +267,7 @@
                 display: flex;
                 margin-top: 20px;
                 align-items: center;
-                gap: 20px;
+                gap: 30px;
                 justify-content: space-around;
                 width: 100%;
                 padding: 20px;
@@ -263,17 +276,17 @@
             }
 
             .icon {
-                width: 30px;
+                width: 45px;
                 cursor: pointer;
             }
 
             .icon-large {
-                width: 50px;
+                width: 70px;
                 cursor: pointer;
             }
 
             .icon-bordered {
-                width: 30px;
+                width: 45px;
                 cursor: pointer;
                 border-radius: 50%;
                 border: 1px solid #6b6b6b;
@@ -284,8 +297,8 @@
                 position: fixed;
                 bottom: 10%;
                 right: 10%;
-                width: 90%;
-                height: 60%;
+                width: 300px;
+                height: 400px;
                 background-color: #333;
                 color: white;
                 padding: 20px;
@@ -305,6 +318,35 @@
 
             .history-entry {
                 margin-bottom: 10px;
+            }
+
+            @media only screen and (max-width: 600px) {
+                .finlix-container {
+                    height: 100%;
+                }
+                .shape-container {
+                    height: 200px;
+                }
+                .question-text {
+                    font-size: 18px;
+                    margin-top: 10px;
+                }
+                .icon-container {
+                    gap: 20px;
+                }
+                .icon {
+                    width: 30px;
+                }
+                .icon-large {
+                    width: 50px;
+                }
+                .icon-bordered {
+                    width: 30px;
+                }
+                .history-box {
+                    width: 90%;
+                    height: 60%;
+                }
             }
         `;
 
