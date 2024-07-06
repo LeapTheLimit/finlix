@@ -9,20 +9,20 @@
             align-items: center;
             background-color: #000;
             color: lightgray;
-            padding: 10px;
+            padding: 8px; /* Reduced by 20% */
             box-sizing: border-box;
             border: 1px solid #333;
             border-radius: 10px;
             overflow: hidden;
             position: fixed;
-            bottom: 120px;
-            right: 20px;
+            bottom: 96px; /* Reduced by 20% */
+            right: 16px; /* Reduced by 20% */
             display: none; /* Start hidden */
         }
         #widget-icon {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 16px; /* Reduced by 20% */
+            right: 16px; /* Reduced by 20% */
             width: 69px; /* Reduced by 20% */
             height: 70px; /* Reduced by 20% */
             cursor: pointer;
@@ -146,7 +146,7 @@
                 width: 100%;
                 flex-direction: column;
                 align-items: center;
-                padding: 20px;
+                padding: 16px; /* Reduced by 20% */
                 box-sizing: border-box;
             }
 
@@ -157,12 +157,12 @@
                 background-color: rgba(199, 54, 217, 0);
                 color: #fff;
                 white-space: nowrap;
-                padding: 8px 16px;
-                font: 500 14px/140% Inter, sans-serif;
-                margin-top: 10px;
+                padding: 6.4px 12.8px; /* Reduced by 20% */
+                font: 500 11.2px/112% Inter, sans-serif; /* Reduced by 20% */
+                margin-top: 8px; /* Reduced by 20% */
                 display: flex;
                 align-items: center;
-                gap: 10px; /* Add some space between SVG and text */
+                gap: 8px; /* Reduced by 20% */
             }
 
             .brand-name svg {
@@ -172,8 +172,8 @@
 
             .powered-by {
                 color: #767676;
-                margin-top: 10px;
-                font: 300 12px/140% Inter, sans-serif;
+                margin-top: 8px; /* Reduced by 20% */
+                font: 300 9.6px/112% Inter, sans-serif; /* Reduced by 20% */
             }
 
             .powered-by a {
@@ -189,7 +189,7 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                margin-top: 20px;
+                margin-top: 16px; /* Reduced by 20% */
                 position: relative;
                 width: 100%;
                 height: 240px; /* Reduced by 20% */
@@ -211,16 +211,16 @@
 
             .purple-circle {
                 background-color: #c736d9;
-                width: 103px; /* Reduced by 20% */
-                height: 107px; /* Reduced by 20% */
+                width: 103.2px; /* Reduced by 20% */
+                height: 107.2px; /* Reduced by 20% */
                 left: calc(50% - 84px); /* Adjusted to be centered and not overlapping */
                 top: calc(50% - 80px); /* Adjusted to be centered and not overlapping */
             }
 
             .blue-circle {
                 background-color: #bcd8fa;
-                width: 54px; /* Reduced by 20% */
-                height: 54px; /* Reduced by 20% */
+                width: 54.4px; /* Reduced by 20% */
+                height: 54.4px; /* Reduced by 20% */
                 left: calc(50% + 32px); /* Adjusted to be centered and not overlapping */
                 top: calc(50% - 64px); /* Adjusted to be centered and not overlapping */
             }
@@ -228,36 +228,36 @@
             .green-circle {
                 background-color: #9aed66;
                 width: 72px; /* Reduced by 20% */
-                height: 69px; /* Reduced by 20% */
+                height: 68.8px; /* Reduced by 20% */
                 left: calc(50% + 16px); /* Adjusted to be centered and not overlapping */
                 top: calc(50% + 8px); /* Adjusted to be centered and not overlapping */
             }
 
             .gray-circle {
                 background-color: #d9d9d9;
-                width: 49px; /* Reduced by 20% */
-                height: 46px; /* Reduced by 20% */
+                width: 48.8px; /* Reduced by 20% */
+                height: 46.4px; /* Reduced by 20% */
                 left: calc(50% - 48px); /* Adjusted to be centered and not overlapping */
-                top: calc(80% + 40px); /* Adjusted to be centered and not overlapping */
+                top: calc(64% + 40px); /* Adjusted to be centered and not overlapping */
             }
 
             .question-text {
                 color: #c3c3c3;
-                margin-top: 20px;
-                font: 400 22px/29px Inter, sans-serif; /* Reduced by 20% */
+                margin-top: 16px; /* Reduced by 20% */
+                font: 400 22.4px/28.8px Inter, sans-serif; /* Reduced by 20% */
                 text-align: center;
             }
 
             .icon-container {
                 display: flex;
-                margin-top: 20px;
+                margin-top: 16px; /* Reduced by 20% */
                 align-items: center;
-                gap: 30px;
+                gap: 24px; /* Reduced by 20% */
                 justify-content: space-around;
                 width: 100%;
-                padding: 20px;
+                padding: 16px; /* Reduced by 20% */
                 position: absolute;
-                bottom: 20px; /* Position at the bottom */
+                bottom: 16px; /* Reduced by 20% */
             }
 
             .icon {
@@ -280,8 +280,8 @@
             .history-box {
                 display: none;
                 position: fixed;
-                bottom: 10%;
-                right: 10%;
+                bottom: 8%;
+                right: 8%;
                 width: 240px; /* Reduced by 20% */
                 height: 320px; /* Reduced by 20% */
                 background-color: #333;
@@ -295,14 +295,14 @@
                 background-color: #c736d9;
                 border: none;
                 color: white;
-                padding: 5px 10px;
+                padding: 4px 8px; /* Reduced by 20% */
                 cursor: pointer;
                 border-radius: 5px;
                 float: right;
             }
 
             .history-entry {
-                margin-bottom: 10px;
+                margin-bottom: 8px; /* Reduced by 20% */
             }
         `;
 
