@@ -1,8 +1,8 @@
 (function() {
     const widgetStyles = `
         #assistant-widget {
-            width: 400px;
-            height: 704px;
+            width: 300px; /* Smaller size for both desktop and mobile */
+            height: 500px; /* Smaller size for both desktop and mobile */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -23,8 +23,8 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 86px;
-            height: 88px;
+            width: 60px; /* Smaller size for both desktop and mobile */
+            height: 60px; /* Smaller size for both desktop and mobile */
             cursor: pointer;
         }
 
@@ -69,13 +69,13 @@
         @media only screen and (max-width: 600px) {
             #assistant-widget {
                 width: 90%;
-                height: 80vh;
+                height: 70vh;
                 bottom: 20px;
                 right: 5%;
             }
             #widget-icon {
-                width: 60px;
-                height: 60px;
+                width: 50px;
+                height: 50px;
                 bottom: 20px;
                 right: 5%;
             }
@@ -119,7 +119,7 @@
             </div>
         </div>
         <div id="widget-icon" onclick="toggleWidget()">
-            <svg width="86" height="88" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="60" height="60" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="43" cy="44" rx="43" ry="44" fill="black"/>
                 <circle cx="32" cy="35" r="12" fill="#C736D9"/>
                 <circle cx="56" cy="55" r="9" fill="#9AED66"/>
