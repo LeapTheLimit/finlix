@@ -1,8 +1,10 @@
 (function() {
     const widgetStyles = `
         #assistant-widget {
-            width: 400px;
-            height: 704px;
+            width: 90%;
+            max-width: 400px;
+            height: 70vh;
+            max-height: 704px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -16,15 +18,15 @@
             overflow: hidden;
             position: fixed;
             bottom: 120px;
-            right: 20px;
+            right: 5%;
             display: none; /* Start hidden */
         }
         #widget-icon {
             position: fixed;
             bottom: 20px;
-            right: 20px;
-            width: 86px;
-            height: 88px;
+            right: 5%;
+            width: 60px;
+            height: 60px;
             cursor: pointer;
         }
 
@@ -104,7 +106,7 @@
             </div>
         </div>
         <div id="widget-icon" onclick="toggleWidget()">
-            <svg width="86" height="88" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="60" height="60" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="43" cy="44" rx="43" ry="44" fill="black"/>
                 <circle cx="32" cy="35" r="12" fill="#C736D9"/>
                 <circle cx="56" cy="55" r="9" fill="#9AED66"/>
@@ -192,7 +194,7 @@
                 margin-top: 20px;
                 position: relative;
                 width: 100%;
-                height: 300px; /* Adjust as needed */
+                height: 200px; /* Adjust as needed */
             }
 
             .shape {
@@ -211,40 +213,40 @@
 
             .purple-circle {
                 background-color: #c736d9;
-                width: 129px;
-                height: 134px;
-                left: calc(50% - 105px); /* Adjusted to be centered and not overlapping */
-                top: calc(50% - 100px); /* Adjusted to be centered and not overlapping */
+                width: 100px;
+                height: 100px;
+                left: calc(50% - 50px); /* Adjusted to be centered and not overlapping */
+                top: calc(50% - 50px); /* Adjusted to be centered and not overlapping */
             }
 
             .blue-circle {
                 background-color: #bcd8fa;
-                width: 68px;
-                height: 68px;
-                left: calc(50% + 40px); /* Adjusted to be centered and not overlapping */
-                top: calc(50% - 80px); /* Adjusted to be centered and not overlapping */
+                width: 50px;
+                height: 50px;
+                left: calc(50% + 20px); /* Adjusted to be centered and not overlapping */
+                top: calc(50% - 40px); /* Adjusted to be centered and not overlapping */
             }
 
             .green-circle {
                 background-color: #9aed66;
-                width: 90px;
-                height: 86px;
-                left: calc(50% + 20px); /* Adjusted to be centered and not overlapping */
+                width: 60px;
+                height: 60px;
+                left: calc(50% + 10px); /* Adjusted to be centered and not overlapping */
                 top: calc(50% + 10px); /* Adjusted to be centered and not overlapping */
             }
 
             .gray-circle {
                 background-color: #d9d9d9;
-                width: 61px;
-                height: 58px;
+                width: 45px;
+                height: 45px;
                 left: calc(50% - 60px); /* Adjusted to be centered and not overlapping */
-                top: calc(80% + 50px); /* Adjusted to be centered and not overlapping */
+                top: calc(80% + 40px); /* Adjusted to be centered and not overlapping */
             }
 
             .question-text {
                 color: #c3c3c3;
                 margin-top: 20px;
-                font: 400 28px/36px Inter, sans-serif;
+                font: 400 20px/28px Inter, sans-serif;
                 text-align: center;
             }
 
@@ -252,7 +254,7 @@
                 display: flex;
                 margin-top: 20px;
                 align-items: center;
-                gap: 30px;
+                gap: 20px;
                 justify-content: space-around;
                 width: 100%;
                 padding: 20px;
@@ -261,17 +263,17 @@
             }
 
             .icon {
-                width: 45px;
+                width: 30px;
                 cursor: pointer;
             }
 
             .icon-large {
-                width: 70px;
+                width: 50px;
                 cursor: pointer;
             }
 
             .icon-bordered {
-                width: 45px;
+                width: 30px;
                 cursor: pointer;
                 border-radius: 50%;
                 border: 1px solid #6b6b6b;
@@ -282,8 +284,8 @@
                 position: fixed;
                 bottom: 10%;
                 right: 10%;
-                width: 300px;
-                height: 400px;
+                width: 90%;
+                height: 60%;
                 background-color: #333;
                 color: white;
                 padding: 20px;
@@ -317,7 +319,7 @@
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = ['ar-AR', 'en-US'];
+            recognition.lang = 'en-US'; // Set initial language to English
 
             recognition.onstart = function() {
                 responseText.innerText = 'Listening...';
@@ -434,7 +436,7 @@
             }
         };
 
-        window.homePage = function() {
+       window.homePage = function() {
             alert("Coming Soon"); // Replace with appropriate behavior to show "Coming Soon"
         };
 
@@ -445,7 +447,7 @@
             if (widget.style.display === 'none' || widget.style.display === '') {
                 widget.style.display = 'flex';
                 widgetIcon.innerHTML = `
-                    <svg width="86" height="88" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="60" height="60" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <ellipse cx="43" cy="44" rx="43" ry="44" fill="black"/>
                         <path d="M43.5 50.5817L28.9465 34.3393C28.5411 33.8869 27.8838 33.8869 27.4785 34.3393L26.304 35.65C25.8987 36.1024 25.8987 36.836 26.304 37.2884L42.766 55.6607C43.1714 56.1131 43.8286 56.1131 44.234 55.6607L60.696 37.2884C61.1013 36.836 61.1013 36.1024 60.696 35.65L59.5215 34.3393C59.1162 33.8869 58.4589 33.8869 58.0535 34.3393L43.5 50.5817Z" fill="url(#paint0_linear_5_74)"/>
                         <defs>
@@ -461,7 +463,7 @@
             } else {
                 widget.style.display = 'none';
                 widgetIcon.innerHTML = `
-                    <svg width="86" height="88" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="60" height="60" viewBox="0 0 86 88" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <ellipse cx="43" cy="44" rx="43" ry="44" fill="black"/>
                         <circle cx="32" cy="35" r="12" fill="#C736D9"/>
                         <circle cx="56" cy="55" r="9" fill="#9AED66"/>
