@@ -313,7 +313,7 @@
         let recognition;
         let history = [];
 
-      if ('webkitSpeechRecognition' in window) {
+        if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
@@ -449,5 +449,3 @@
 
     loadScript('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js', initWidget);
 })();
-)
-
