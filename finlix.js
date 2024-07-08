@@ -312,7 +312,7 @@
         const responseText = document.querySelector('.question-text');
         let recognition;
         let history = [];
-        let audio; // Added to manage audio playback
+        let audio;
 
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
@@ -351,11 +351,8 @@
         }
 
         window.startListening = function() {
+            stopAudioPlayback(); // Stop the bot's speech if it's currently playing
             recognition.start();
-            if (audio) {
-                audio.pause(); // Stop the audio playback
-                audio.currentTime = 0; // Reset the playback to start
-            }
         };
 
         async function handleUserMessage(message) {
@@ -401,6 +398,13 @@
             } catch (error) {
                 console.error('Error scraping website', error);
                 alert('Failed to scrape the website.');
+            }
+        }
+
+        function stopAudioPlayback() {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
             }
         }
 
