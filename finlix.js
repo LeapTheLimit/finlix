@@ -312,7 +312,7 @@
         const responseText = document.querySelector('.question-text');
         let recognition;
         let history = [];
-        let audio = null; // Add a global variable to hold the audio object
+        let audio; // Added to manage audio playback
 
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
@@ -351,10 +351,11 @@
         }
 
         window.startListening = function() {
-            if (audio) {
-                audio.pause(); // Stop any currently playing audio
-            }
             recognition.start();
+            if (audio) {
+                audio.pause(); // Stop the audio playback
+                audio.currentTime = 0; // Reset the playback to start
+            }
         };
 
         async function handleUserMessage(message) {
