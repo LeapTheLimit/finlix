@@ -140,8 +140,6 @@ async function handleUserMessage(message) {
         const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
         let response = chatResponse.data.response;
-        response = convertNumbersToWords(response);
-        response = translateMathSymbols(response);
         displayRotatingText(response);
         history.push({ bot: response });
 
