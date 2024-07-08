@@ -1,3 +1,4 @@
+// Updated frontend script with proper audio handling
 (function() {
     const widgetStyles = `
         #assistant-widget {
@@ -312,7 +313,7 @@
         const responseText = document.querySelector('.question-text');
         let recognition;
         let history = [];
-        let audio; // Declare audio as a global variable
+        let audio = null; // Add this to control audio playback
 
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
@@ -325,6 +326,7 @@
                 document.querySelectorAll('.circle').forEach(circle => {
                     circle.classList.add('circle-listening');
                 });
+                stopAudio(); // Add this to stop the audio when listening starts
             };
 
             recognition.onerror = function(event) {
@@ -366,10 +368,6 @@
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
 
                 const audioContent = ttsResponse.data.audioContent;
-                if (audio) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                }
                 audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
                 audio.play();
 
@@ -379,6 +377,13 @@
             } catch (error) {
                 console.error('Error handling user message', error);
                 responseText.innerText = 'Error occurred while processing your message.';
+            }
+        }
+
+        function stopAudio() {
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
             }
         }
 
