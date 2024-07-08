@@ -134,63 +134,75 @@
         document.head.appendChild(script);
     }
 
-async function handleUserMessage(message) {
-    try {
-        history.push({ user: message });
-        const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
+    function convertNumberToWords(num) {
+        const units = ["", "واحد", "اثنان", "ثلاثة", "أربعة", "خمسة", "ستة", "سبعة", "ثمانية", "تسعة"];
+        const teens = ["عشرة", "أحد عشر", "اثنا عشر", "ثلاثة عشر", "أربعة عشر", "خمسة عشر", "ستة عشر", "سبعة عشر", "ثمانية عشر", "تسعة عشر"];
+        const tens = ["", "عشر", "عشرون", "ثلاثون", "أربعون", "خمسون", "ستون", "سبعون", "ثمانون", "تسعون"];
+        const hundreds = ["", "مئة", "مئتان", "ثلاثمئة", "أربعمئة", "خمسمئة", "ستمئة", "سبعمئة", "ثمانمئة", "تسعمئة"];
+        const thousands = ["", "ألف", "ألفان", "ثلاثة آلاف", "أربعة آلاف", "خمسة آلاف", "ستة آلاف", "سبعة آلاف", "ثمانية آلاف", "تسعة آلاف"];
 
-        let response = chatResponse.data.response;
-        response = convertNumbersToWords(response);
-        response = translateMathSymbols(response);
-        displayRotatingText(response);
-        history.push({ bot: response });
-
-        const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
-
-        const audioContent = ttsResponse.data.audioContent;
-        audioInstance = new Audio(`data:audio/mp3;base64,${audioContent}`);
-        audioInstance.play();
-
-        await saveChatMessage(message, "general");
-    } catch (error) {
-        console.error('Error handling user message', error);
-        responseText.innerText = 'Error occurred while processing your message.';
+        let words = [];
+        if (num >= 1000) {
+            words.push(thousands[Math.floor(num / 1000)]);
+            num %= 1000;
+        }
+        if (num >= 100) {
+            words.push(hundreds[Math.floor(num / 100)]);
+            num %= 100;
+        }
+        if (num >= 20) {
+            words.push(tens[Math.floor(num / 10)]);
+            num %= 10;
+        }
+        if (num >= 10) {
+            words.push(teens[num - 10]);
+        } else if (num > 0) {
+            words.push(units[num]);
+        }
+        return words.filter(Boolean).join(" و ");
     }
-}
 
-function convertNumbersToWords(text) {
-    const numberMap = {
-        "0": "صفر",
-        "1": "واحد",
-        "2": "اثنان",
-        "3": "ثلاثة",
-        "4": "أربعة",
-        "5": "خمسة",
-        "6": "ستة",
-        "7": "سبعة",
-        "8": "ثمانية",
-        "9": "تسعة",
-        "10": "عشرة"
-    };
-    for (const [digit, word] of Object.entries(numberMap)) {
-        text = text.replace(new RegExp(`\\b${digit}\\b`, 'g'), word);
+    function convertNumbersToWords(text) {
+        return text.replace(/\d+/g, match => convertNumberToWords(parseInt(match)));
     }
-    return text;
-}
 
-function translateMathSymbols(text) {
-    const mathSymbols = {
-        "+": "زائد",
-        "-": "ناقص",
-        "*": "ضرب",
-        "/": "قسمة",
-        "=": "يساوي"
-    };
-    for (const [symbol, word] of Object.entries(mathSymbols)) {
-        text = text.replace(new RegExp(`\\${symbol}`, 'g'), ` ${word} `);
+    function translateMathSymbols(text) {
+        const mathSymbols = {
+            "+": "زائد",
+            "-": "ناقص",
+            "*": "ضرب",
+            "/": "قسمة",
+            "=": "يساوي"
+        };
+        for (const [symbol, word] of Object.entries(mathSymbols)) {
+            text = text.replace(new RegExp(`\\${symbol}`, 'g'), ` ${word} `);
+        }
+        return text;
     }
-    return text;
-}
+
+    async function handleUserMessage(message) {
+        try {
+            history.push({ user: message });
+            const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
+
+            let response = chatResponse.data.response;
+            response = translateMathSymbols(response);
+            response = convertNumbersToWords(response);
+            displayRotatingText(response);
+            history.push({ bot: response });
+
+            const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
+
+            const audioContent = ttsResponse.data.audioContent;
+            audioInstance = new Audio(`data:audio/mp3;base64,${audioContent}`);
+            audioInstance.play();
+
+            await saveChatMessage(message, "general");
+        } catch (error) {
+            console.error('Error handling user message', error);
+            responseText.innerText = 'Error occurred while processing your message.';
+        }
+    }
 
     function initWidget() {
         loadStyles(widgetStyles);
@@ -421,8 +433,8 @@ function translateMathSymbols(text) {
                 const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
                 let response = chatResponse.data.response;
-                response = convertNumbersToWords(response);
                 response = translateMathSymbols(response);
+                response = convertNumbersToWords(response);
                 displayRotatingText(response);
                 history.push({ bot: response });
 
