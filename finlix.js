@@ -312,6 +312,7 @@
         const responseText = document.querySelector('.question-text');
         let recognition;
         let history = [];
+        let audio = null; // Add a global variable to hold the audio object
 
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
@@ -350,6 +351,9 @@
         }
 
         window.startListening = function() {
+            if (audio) {
+                audio.pause(); // Stop any currently playing audio
+            }
             recognition.start();
         };
 
@@ -365,7 +369,7 @@
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
 
                 const audioContent = ttsResponse.data.audioContent;
-                const audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
+                audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
                 audio.play();
 
                 // Save chat message
