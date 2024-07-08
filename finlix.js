@@ -134,25 +134,63 @@
         document.head.appendChild(script);
     }
 
-    function convertNumbersToWords(text) {
-        const numberMap = {
-            "0": "صفر",
-            "1": "واحد",
-            "2": "اثنان",
-            "3": "ثلاثة",
-            "4": "أربعة",
-            "5": "خمسة",
-            "6": "ستة",
-            "7": "سبعة",
-            "8": "ثمانية",
-            "9": "تسعة",
-            "10": "عشرة"
-        };
+async function handleUserMessage(message) {
+    try {
+        history.push({ user: message });
+        const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
-        return text.replace(/\d+/g, match => {
-            return match.split('').map(digit => numberMap[digit]).join(' ');
-        });
+        let response = chatResponse.data.response;
+        response = convertNumbersToWords(response);
+        response = translateMathSymbols(response);
+        displayRotatingText(response);
+        history.push({ bot: response });
+
+        const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
+
+        const audioContent = ttsResponse.data.audioContent;
+        audioInstance = new Audio(`data:audio/mp3;base64,${audioContent}`);
+        audioInstance.play();
+
+        await saveChatMessage(message, "general");
+    } catch (error) {
+        console.error('Error handling user message', error);
+        responseText.innerText = 'Error occurred while processing your message.';
     }
+}
+
+function convertNumbersToWords(text) {
+    const numberMap = {
+        "0": "صفر",
+        "1": "واحد",
+        "2": "اثنان",
+        "3": "ثلاثة",
+        "4": "أربعة",
+        "5": "خمسة",
+        "6": "ستة",
+        "7": "سبعة",
+        "8": "ثمانية",
+        "9": "تسعة",
+        "10": "عشرة"
+    };
+    for (const [digit, word] of Object.entries(numberMap)) {
+        text = text.replace(new RegExp(digit, 'g'), word);
+    }
+    return text;
+}
+
+function translateMathSymbols(text) {
+    const mathSymbols = {
+        "+": "زائد",
+        "-": "ناقص",
+        "*": "ضرب",
+        "/": "قسمة",
+        "=": "يساوي"
+    };
+    for (const [symbol, word] of Object.entries(mathSymbols)) {
+        text = text.replace(new RegExp(`\\${symbol}`, 'g'), ` ${word} `);
+    }
+    return text;
+}
 
     function initWidget() {
         loadStyles(widgetStyles);
