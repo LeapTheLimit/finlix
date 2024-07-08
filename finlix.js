@@ -140,6 +140,8 @@ async function handleUserMessage(message) {
         const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
 
         let response = chatResponse.data.response;
+        response = convertNumbersToWords(response);
+        response = translateMathSymbols(response);
         displayRotatingText(response);
         history.push({ bot: response });
 
@@ -171,7 +173,7 @@ function convertNumbersToWords(text) {
         "10": "عشرة"
     };
     for (const [digit, word] of Object.entries(numberMap)) {
-        text = text.replace(new RegExp(digit, 'g'), word);
+        text = text.replace(new RegExp(`\\b${digit}\\b`, 'g'), word);
     }
     return text;
 }
@@ -420,6 +422,7 @@ function translateMathSymbols(text) {
 
                 let response = chatResponse.data.response;
                 response = convertNumbersToWords(response);
+                response = translateMathSymbols(response);
                 displayRotatingText(response);
                 history.push({ bot: response });
 
