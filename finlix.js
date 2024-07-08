@@ -312,7 +312,7 @@
         const responseText = document.querySelector('.question-text');
         let recognition;
         let history = [];
-        let audio;
+        let audio; // Declare audio as a global variable
 
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
@@ -351,7 +351,6 @@
         }
 
         window.startListening = function() {
-            stopAudioPlayback(); // Stop the bot's speech if it's currently playing
             recognition.start();
         };
 
@@ -367,6 +366,10 @@
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
 
                 const audioContent = ttsResponse.data.audioContent;
+                if (audio) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
                 audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
                 audio.play();
 
@@ -398,13 +401,6 @@
             } catch (error) {
                 console.error('Error scraping website', error);
                 alert('Failed to scrape the website.');
-            }
-        }
-
-        function stopAudioPlayback() {
-            if (audio) {
-                audio.pause();
-                audio.currentTime = 0;
             }
         }
 
