@@ -1,4 +1,3 @@
-// Updated frontend script with proper audio handling
 (function() {
     const widgetStyles = `
         #assistant-widget {
@@ -313,7 +312,8 @@
         const responseText = document.querySelector('.question-text');
         let recognition;
         let history = [];
-        let audio = null; // Add this to control audio playback
+        let audioPlaying = false;
+        let audioInstance = null;
 
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
@@ -326,7 +326,11 @@
                 document.querySelectorAll('.circle').forEach(circle => {
                     circle.classList.add('circle-listening');
                 });
-                stopAudio(); // Add this to stop the audio when listening starts
+                if (audioInstance) {
+                    audioInstance.pause();
+                    audioInstance = null;
+                    audioPlaying = false;
+                }
             };
 
             recognition.onerror = function(event) {
@@ -368,44 +372,16 @@
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
 
                 const audioContent = ttsResponse.data.audioContent;
-                audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
+                const audio = new Audio(`data:audio/mp3;base64,${audioContent}`);
+                audioInstance = audio;
+                audioInstance.onended = () => {
+                    audioPlaying = false;
+                };
                 audio.play();
-
-                // Save chat message
-                await saveChatMessage(message, "general");
-
+                audioPlaying = true;
             } catch (error) {
                 console.error('Error handling user message', error);
                 responseText.innerText = 'Error occurred while processing your message.';
-            }
-        }
-
-        function stopAudio() {
-            if (audio) {
-                audio.pause();
-                audio.currentTime = 0;
-            }
-        }
-
-        async function saveChatMessage(message, category) {
-            try {
-                await axios.post(`${serverUrl}/save-chat-message`, {
-                    message: message,
-                    category: category
-                });
-            } catch (error) {
-                console.error('Error saving chat message', error);
-            }
-        }
-
-        async function scrapeWebsite(url) {
-            try {
-                const scrapeResponse = await axios.post(`${serverUrl}/scrape`, { url: url });
-                const explanation = scrapeResponse.data.explanation;
-                handleUserMessage(`The page says: ${explanation}`);
-            } catch (error) {
-                console.error('Error scraping website', error);
-                alert('Failed to scrape the website.');
             }
         }
 
