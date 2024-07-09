@@ -15,13 +15,13 @@
           border-radius: 10px;
           overflow: hidden;
           position: fixed;
-          bottom: 106px;
+          bottom: 129px;
           right: 16px; z-index: 900;
           display: none;
         }
         #widget-icon {
             position: fixed;
-            bottom: 16px;
+            bottom: 50px;
             right: 16px;
             width: 69px;
             height: 70px;
