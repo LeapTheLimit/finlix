@@ -1,23 +1,23 @@
 (function() {
     const widgetStyles = `
-        #assistant-widget {
-            width: 320px;
-            height: 563px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #000;
-            color: lightgray;
-            padding: 8px;
-            box-sizing: border-box;
-            border: 1px solid #333;
-            border-radius: 10px;
-            overflow: hidden;
-            position: fixed;
-            bottom: 96px;
-            right: 16px;
-            display: none;
+      #assistant-widget {
+          width: 320px;
+          height: 563px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #000;
+          color: lightgray;
+          padding: 8px;
+          box-sizing: border-box;
+          border: 1px solid #333;
+          border-radius: 10px;
+          overflow: hidden;
+          position: fixed;
+          bottom: 106px;
+          right: 16px; z-index: 900;
+          display: none;
         }
         #widget-icon {
             position: fixed;
@@ -65,6 +65,37 @@
                 transform: scale(1);
             }
         }
+
+        .language-menu {
+            position: absolute;
+            top: 50px;
+            right: 10px;
+            display: none;
+            flex-direction: column;
+            background-color: #333;
+            border: 1px solid #666;
+            border-radius: 10px;
+            padding: 10px;
+            z-index: 1000;
+        }
+
+        .language-menu.active {
+            display: flex;
+        }
+
+        .language-menu button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: left;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .language-menu button:hover {
+            background-color: #555;
+        }
     `;
 
     const widgetHTML = `
@@ -95,7 +126,20 @@
                 <div class="icon-container">
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/b5c24373f8dd5ef5131c67177bccdbef574bf3f9ed5118f4e197ea82589a22df?apiKey=6ff838e322054338a5da6863c2494c61&" alt="History Icon" class="icon" onclick="toggleHistory()" />
                     <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/95dad8e994e6b876df822e962cfc87ce2b5a9d7d32d644beda1bacf1554332cc?apiKey=6ff838e322054338a5da6863c2494c61&" alt="Microphone Icon" class="icon-large" onclick="startListening()" />
-                    <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/ec3ad13fd252c5c0acb23d9fb00ecd75dab04844fe615a32906bc0f2ee5f0f79?apiKey=6ff838e322054338a5da6863c2494c61&" alt="Home Icon" class="icon-bordered" onclick="homePage()" />
+                    <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon" onclick="toggleLanguageMenu()">
+                        <rect x="0.25" y="0.25" width="28.5" height="28.5" rx="13.75" fill="#272626"/>
+                        <rect x="0.25" y="0.25" width="28.5" height="28.5" rx="13.75" stroke="#6B6B6B" stroke-width="0.5"/>
+                        <rect x="0.25" y="0.25" width="28.5" height="28.5" rx="13.75" fill="#272626"/>
+                        <rect x="0.25" y="0.25" width="28.5" height="28.5" rx="13.75" stroke="#6B6B6B" stroke-width="0.5"/>
+                        <path d="M14.5 23.1667C19.3325 23.1667 23.25 19.0626 23.25 14C23.25 8.9374 19.3325 4.83334 14.5 4.83334C9.66751 4.83334 5.75 8.9374 5.75 14C5.75 19.0626 9.66751 23.1667 14.5 23.1667Z" stroke="white" stroke-linecap="square"/>
+                        <path d="M14.5 23.1667C16.8333 20.9445 18 17.8889 18 14C18 10.1111 16.8333 7.05557 14.5 4.83334C12.1667 7.05557 11 10.1111 11 14C11 17.8889 12.1667 20.9445 14.5 23.1667Z" stroke="white" stroke-linecap="round"/>
+                        <path d="M6.1875 11.25H22.8125M6.1875 16.75H22.8125" stroke="white" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="language-menu" id="languageMenu">
+                    <button onclick="setLanguage('ar')">Arabic</button>
+                    <button onclick="setLanguage('en')">English</button>
+                    <button onclick="setLanguage('he')">Hebrew</button>
                 </div>
             </section>
             <div class="history-box" id="historyBox">
@@ -114,7 +158,7 @@
         </div>
     `;
 
-    function loadStyles(styles) {
+       function loadStyles(styles) {
         const styleSheet = document.createElement('style');
         styleSheet.type = 'text/css';
         styleSheet.innerText = styles;
@@ -134,36 +178,48 @@
         document.head.appendChild(script);
     }
 
-    function convertNumberToWords(num) {
-        const units = ["", "واحد", "اثنان", "ثلاثة", "أربعة", "خمسة", "ستة", "سبعة", "ثمانية", "تسعة"];
-        const teens = ["عشرة", "أحد عشر", "اثنا عشر", "ثلاثة عشر", "أربعة عشر", "خمسة عشر", "ستة عشر", "سبعة عشر", "ثمانية عشر", "تسعة عشر"];
-        const tens = ["", "عشر", "عشرون", "ثلاثون", "أربعون", "خمسون", "ستون", "سبعون", "ثمانون", "تسعون"];
-        const hundreds = ["", "مئة", "مئتان", "ثلاثمئة", "أربعمئة", "خمسمئة", "ستمئة", "سبعمئة", "ثمانمئة", "تسعمئة"];
-        const thousands = ["", "ألف", "ألفان", "ثلاثة آلاف", "أربعة آلاف", "خمسة آلاف", "ستة آلاف", "سبعة آلاف", "ثمانية آلاف", "تسعة آلاف"];
+    async function handleUserMessage(message) {
+        try {
+            history.push({ user: message });
+            const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message, language: selectedLanguage });
 
-        let words = [];
-        if (num >= 1000) {
-            words.push(thousands[Math.floor(num / 1000)]);
-            num %= 1000;
+            let response = chatResponse.data.response;
+            response = translateMathSymbols(response);
+            response = convertNumbersToWords(response);
+            displayRotatingText(response);
+            history.push({ bot: response });
+
+            const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: selectedLanguage });
+
+            const audioContent = ttsResponse.data.audioContent;
+            audioInstance = new Audio(`data:audio/mp3;base64,${audioContent}`);
+            audioInstance.play();
+
+            await saveChatMessage(message, "general");
+        } catch (error) {
+            console.error('Error handling user message', error);
+            responseText.innerText = 'Error occurred while processing your message.';
         }
-        if (num >= 100) {
-            words.push(hundreds[Math.floor(num / 100)]);
-            num %= 100;
-        }
-        if (num >= 20) {
-            words.push(tens[Math.floor(num / 10)]);
-            num %= 10;
-        }
-        if (num >= 10) {
-            words.push(teens[num - 10]);
-        } else if (num > 0) {
-            words.push(units[num]);
-        }
-        return words.filter(Boolean).join(" و ");
     }
 
     function convertNumbersToWords(text) {
-        return text.replace(/\d+/g, match => convertNumberToWords(parseInt(match)));
+        const numberMap = {
+            "0": "صفر",
+            "1": "واحد",
+            "2": "اثنان",
+            "3": "ثلاثة",
+            "4": "أربعة",
+            "5": "خمسة",
+            "6": "ستة",
+            "7": "سبعة",
+            "8": "ثمانية",
+            "9": "تسعة",
+            "10": "عشرة"
+        };
+        for (const [digit, word] of Object.entries(numberMap)) {
+            text = text.replace(new RegExp(digit, 'g'), word);
+        }
+        return text;
     }
 
     function translateMathSymbols(text) {
@@ -180,33 +236,10 @@
         return text;
     }
 
-    async function handleUserMessage(message) {
-        try {
-            history.push({ user: message });
-            const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
-
-            let response = chatResponse.data.response;
-            response = translateMathSymbols(response);
-            response = convertNumbersToWords(response);
-            displayRotatingText(response);
-            history.push({ bot: response });
-
-            const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
-
-            const audioContent = ttsResponse.data.audioContent;
-            audioInstance = new Audio(`data:audio/mp3;base64,${audioContent}`);
-            audioInstance.play();
-
-            await saveChatMessage(message, "general");
-        } catch (error) {
-            console.error('Error handling user message', error);
-            responseText.innerText = 'Error occurred while processing your message.';
-        }
-    }
-
     function initWidget() {
         loadStyles(widgetStyles);
         loadHTML(widgetHTML);
+  
 
         const cssStyles = `
             .finlix-container {
@@ -376,18 +409,20 @@
             }
         `;
 
-        loadStyles(cssStyles);
+                loadStyles(cssStyles);
 
-        const serverUrl = 'https://leapthelimit-mz4r7ctc7q-zf.a.run.app';
+        const serverUrl = 'https://my-flask-app-mz4r7ctc7q-zf.a.run.app';
         const responseText = document.querySelector('.question-text');
         let recognition;
         let history = [];
+        let audioInstance;
+        let selectedLanguage = 'ar';
 
         if ('webkitSpeechRecognition' in window) {
             recognition = new webkitSpeechRecognition();
             recognition.continuous = false;
             recognition.interimResults = false;
-            recognition.lang = 'ar';
+            recognition.lang = 'ar-SA';
 
             recognition.onstart = function() {
                 if (audioInstance) {
@@ -430,7 +465,7 @@
         async function handleUserMessage(message) {
             try {
                 history.push({ user: message });
-                const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message });
+                const chatResponse = await axios.post(`${serverUrl}/chat`, { message: message, language: selectedLanguage });
 
                 let response = chatResponse.data.response;
                 response = translateMathSymbols(response);
@@ -438,7 +473,7 @@
                 displayRotatingText(response);
                 history.push({ bot: response });
 
-                const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: 'ar-SA' });
+                const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: selectedLanguage });
 
                 const audioContent = ttsResponse.data.audioContent;
                 audioInstance = new Audio(`data:audio/mp3;base64,${audioContent}`);
@@ -544,6 +579,18 @@
                     </svg>
                 `;
             }
+        };
+
+        window.toggleLanguageMenu = function() {
+            const languageMenu = document.getElementById('languageMenu');
+            languageMenu.classList.toggle('active');
+        };
+
+        window.setLanguage = function(lang) {
+            selectedLanguage = lang;
+            console.log(`Language set to: ${lang}`);
+            recognition.lang = lang === 'en' ? 'en-US' : lang === 'he' ? 'he-IL' : 'ar-SA';
+            toggleLanguageMenu();
         };
     }
 
