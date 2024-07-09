@@ -21,11 +21,12 @@
         }
         #widget-icon {
             position: fixed;
-            bottom: 150px;
-            right: 50px;
+            bottom: 50px;
+            right: 16px;
             width: 69px;
             height: 70px;
             cursor: pointer;
+            z-index: 1000;
         }
 
         .breathing {
