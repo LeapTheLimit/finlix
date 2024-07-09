@@ -21,8 +21,8 @@
         }
         #widget-icon {
             position: fixed;
-            bottom: 0px;
-            right: 16px;
+            bottom: 50px;
+            right: 50px;
             width: 69px;
             height: 70px;
             cursor: pointer;
