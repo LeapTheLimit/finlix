@@ -15,18 +15,17 @@
           border-radius: 10px;
           overflow: hidden;
           position: fixed;
-          bottom: 129px;
+          bottom: 106px;
           right: 16px; z-index: 900;
           display: none;
         }
         #widget-icon {
             position: fixed;
-            bottom: 50px;
+            bottom: 16px;
             right: 16px;
             width: 69px;
             height: 70px;
             cursor: pointer;
-            z-index: 1000;
         }
 
         .breathing {
@@ -412,7 +411,7 @@
 
                 loadStyles(cssStyles);
 
-        const serverUrl = 'https://my-flask-app-mz4r7ctc7q-zf.a.run.app';
+        const serverUrl = 'https://leapthelimit-mz4r7ctc7q-zf.a.run.app';
         const responseText = document.querySelector('.question-text');
         let recognition;
         let history = [];
