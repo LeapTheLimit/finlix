@@ -15,18 +15,17 @@
           border-radius: 10px;
           overflow: hidden;
           position: fixed;
-          bottom: 129px;
+          bottom: 106px;
           right: 16px; z-index: 900;
           display: none;
         }
         #widget-icon {
             position: fixed;
-            bottom: 50px;
+            bottom: 16px;
             right: 16px;
             width: 69px;
             height: 70px;
             cursor: pointer;
-            z-index: 1000;
         }
 
         .breathing {
@@ -159,7 +158,7 @@
         </div>
     `;
 
-       function loadStyles(styles) {
+    function loadStyles(styles) {
         const styleSheet = document.createElement('style');
         styleSheet.type = 'text/css';
         styleSheet.innerText = styles;
@@ -193,6 +192,9 @@
             const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: selectedLanguage });
 
             const audioContent = ttsResponse.data.audioContent;
+            if (audioInstance) {
+                audioInstance.pause();
+            }
             audioInstance = new Audio(`data:audio/mp3;base64,${audioContent}`);
             audioInstance.play();
 
@@ -410,7 +412,7 @@
             }
         `;
 
-                loadStyles(cssStyles);
+        loadStyles(cssStyles);
 
         const serverUrl = 'https://leapthelimit-mz4r7ctc7q-zf.a.run.app';
         const responseText = document.querySelector('.question-text');
@@ -477,6 +479,9 @@
                 const ttsResponse = await axios.post(`${serverUrl}/synthesize`, { text: response, language_code: selectedLanguage });
 
                 const audioContent = ttsResponse.data.audioContent;
+                if (audioInstance) {
+                    audioInstance.pause();
+                }
                 audioInstance = new Audio(`data:audio/mp3;base64,${audioContent}`);
                 audioInstance.play();
 
